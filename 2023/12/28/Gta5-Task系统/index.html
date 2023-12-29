@@ -1,251 +1,669 @@
+
+
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="luhe">
+  <meta name="keywords" content="">
   
-  <title>Gta5 Task系统 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Task系统组成aiTaskTreeaiTaskaiTaskManager TaskTree入口函数Process以及UpdateTasks 1234567void CTaskTree::Process(float fTimeStep)&amp;#123;	STRVIS_AUTO_CONTEXT(strStreamingVisualize::TASKTREE);	&#x2F;&#x2F;main tasks	UpdateTa">
+    <meta name="description" content="探索一下Gta5的Task系统。 Task系统组成aiTaskTreeaiTaskaiTaskManager TaskTree入口函数Process以及UpdateTasks 1234567void CTaskTree::Process(float fTimeStep)&amp;#123;	STRVIS_AUTO_CONTEXT(strStreamingVisualize::TASKTREE);	&#x2F;&#x2F;ma">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Gta5 Task系统">
 <meta property="og:url" content="http://example.com/2023/12/28/Gta5-Task%E7%B3%BB%E7%BB%9F/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Task系统组成aiTaskTreeaiTaskaiTaskManager TaskTree入口函数Process以及UpdateTasks 1234567void CTaskTree::Process(float fTimeStep)&amp;#123;	STRVIS_AUTO_CONTEXT(strStreamingVisualize::TASKTREE);	&#x2F;&#x2F;main tasks	UpdateTa">
-<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="LuHe">
+<meta property="og:description" content="探索一下Gta5的Task系统。 Task系统组成aiTaskTreeaiTaskaiTaskManager TaskTree入口函数Process以及UpdateTasks 1234567void CTaskTree::Process(float fTimeStep)&amp;#123;	STRVIS_AUTO_CONTEXT(strStreamingVisualize::TASKTREE);	&#x2F;&#x2F;ma">
+<meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-12-27T19:48:23.000Z">
-<meta property="article:modified_time" content="2023-12-27T19:50:00.842Z">
-<meta property="article:author" content="John Doe">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+<meta property="article:modified_time" content="2023-12-29T14:37:00.013Z">
+<meta property="article:author" content="luhe">
+<meta name="twitter:card" content="summary_large_image">
   
   
-    <link rel="shortcut icon" href="/favicon.png">
   
-  
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+  <title>Gta5 Task系统 - LuHe</title>
 
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
   
 <meta name="generator" content="Hexo 6.3.0"></head>
 
+
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-        
-          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
-        
-        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-
-      <div class="outer">
-        <section id="main"><article id="post-Gta5-Task系统" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2023/12/28/Gta5-Task%E7%B3%BB%E7%BB%9F/" class="article-date">
-  <time class="dt-published" datetime="2023-12-27T19:48:23.000Z" itemprop="datePublished">2023-12-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="p-name article-title" itemprop="headline name">
-      Gta5 Task系统
-    </h1>
   
 
-      </header>
+  <header>
     
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h4 id="Task系统组成"><a href="#Task系统组成" class="headerlink" title="Task系统组成"></a>Task系统组成</h4><p><strong>aiTaskTree</strong><br><strong>aiTask</strong><br><strong>aiTaskManager</strong></p>
-<h4 id="TaskTree"><a href="#TaskTree" class="headerlink" title="TaskTree"></a>TaskTree</h4><p>入口函数<code>Process</code>以及<code>UpdateTasks</code></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">CTaskTree::Process</span><span class="params">(<span class="type">float</span> fTimeStep)</span></span><br><span class="line">&#123;</span><br><span class="line">	STRVIS_AUTO_CONTEXT(strStreamingVisualize::TASKTREE);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//main tasks</span></span><br><span class="line">	UpdateTasks(<span class="literal">false</span>, <span class="number">-1</span>, fTimeStep);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><code>UpdateTasks</code>会运行任务队列，当任务执行完后会自动执行下一个任务。任务有优先级，会优先执行等级高的。同时由<code>BeginTaskUpdates</code>和<code>EndTaskUpdates</code>记录运行时间。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">aiTaskTree::UpdateTasks</span><span class="params">(<span class="type">const</span> <span class="type">bool</span> bDontDeleteHeadTask, <span class="type">const</span> s32 iDefaultTaskPriority, <span class="type">float</span> timeStep)</span></span><br><span class="line">&#123;</span><br><span class="line">	aiTask::BeginTaskUpdates(timeStep);</span><br><span class="line"></span><br><span class="line">	m_iDeadman = <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Compute the priority of the main task to process.      </span></span><br><span class="line">	s32 iPriority = GetActiveTaskPriority();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Keep track of the current priority of task being processed.</span></span><br><span class="line">	m_iPriorityBeingProcessed = iPriority;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Process the highest priority task</span></span><br><span class="line">	<span class="keyword">if</span>(iPriority &gt; <span class="number">-1</span>)</span><br><span class="line">	&#123;</span><br><span class="line"> 		aiTask* pCurrentTask = m_Tasks[iPriority];</span><br><span class="line">		<span class="keyword">while</span>(pCurrentTask)</span><br><span class="line">		&#123;</span><br><span class="line">			UpdateResult result = UpdateTask(pCurrentTask, timeStep);</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span>(result == UR_QUIT)</span><br><span class="line">			&#123;	</span><br><span class="line">				<span class="comment">// If the current task is the top-most parent task and it quits, we&#x27;ll be left with no current task,</span></span><br><span class="line">				<span class="comment">// tasks can optionally force the next active task to update this frame</span></span><br><span class="line">				<span class="type">const</span> <span class="type">bool</span> bProcessNextActiveTaskImmediately = pCurrentTask-&gt;GetIsFlagSet(aiTaskFlags::ProcessNextActiveTaskImmediately);</span><br><span class="line"></span><br><span class="line">				<span class="comment">// The movement tasks have to be kept for one frame, so don&#x27;t delete them if requested not to</span></span><br><span class="line">				<span class="keyword">if</span>(bDontDeleteHeadTask == <span class="literal">false</span>)</span><br><span class="line">				&#123;</span><br><span class="line">					DeleteTask(pCurrentTask);</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">				<span class="comment">// Create a new default task if the last one was just deleted.</span></span><br><span class="line">				<span class="keyword">if</span>(iPriority == iDefaultTaskPriority)</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="keyword">if</span>(m_pEntity)</span><br><span class="line">					&#123;</span><br><span class="line">						<span class="comment">// Replace the default task</span></span><br><span class="line">						SetTask(GetDefaultTask(), iDefaultTaskPriority);</span><br><span class="line"></span><br><span class="line">						<span class="comment">// Process the default task straight away</span></span><br><span class="line">						pCurrentTask = m_Tasks[iDefaultTaskPriority];</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">else</span></span><br><span class="line">					&#123;</span><br><span class="line">						pCurrentTask = <span class="literal">NULL</span>;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span></span><br><span class="line">				&#123;</span><br><span class="line">					<span class="comment">// Process the next active task straight away after we&#x27;ve finished our current task if flagged to</span></span><br><span class="line">					<span class="keyword">if</span>(bProcessNextActiveTaskImmediately)</span><br><span class="line">					&#123;</span><br><span class="line">						iPriority = GetActiveTaskPriority();</span><br><span class="line">						pCurrentTask = m_Tasks[iPriority];</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">else</span></span><br><span class="line">					&#123;</span><br><span class="line">						pCurrentTask = <span class="literal">NULL</span>;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				pCurrentTask = <span class="literal">NULL</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Reset the priority being processed</span></span><br><span class="line">	m_iPriorityBeingProcessed = <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">	aiTask::EndTaskUpdates();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>UpdateTask</code>重载是主要部分执行:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UpdateResult <span class="title function_">UpdateTask</span><span class="params">(aiTask* pTask, <span class="type">float</span> timeStep)</span>;</span><br></pre></td></tr></table></figure>
-
-<p>内部是循环执行<code>Task::ProcessFSM</code>：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Call the main update function</span></span><br><span class="line">	<span class="keyword">while</span>(bContinueFsmUpdate)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// By default, don&#x27;t repeat the FSM update, this will be set below if the state changes</span></span><br><span class="line">		bContinueFsmUpdate = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Keep track of any state changes</span></span><br><span class="line">		s32 iOldState = pTask-&gt;GetState();</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Tell the task about it&#x27;s recording status</span></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> TASK_DETAILED_INFINITE_LOOP_TRAP</span></span><br><span class="line">		NOTFINAL_ONLY(pTask-&gt;SetCallstackRecordingFlagState( taskRecordingFlags ));</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">		<span class="comment">// If the state is being restarted after being aborted, simply restart the state then continue as normal</span></span><br><span class="line">		<span class="comment">// OR if the state hasn&#x27;t yet started, enter the state then continue as normal</span></span><br><span class="line">		<span class="keyword">if</span>(pTask-&gt;m_Flags.IsFlagSet(aiTaskFlags::RestartStateOnResume) || pTask-&gt;m_Flags.IsFlagSet(aiTaskFlags::CurrentStateNotYetEntered))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// Enter the new state, reset the task pointer in case it is non-null </span></span><br><span class="line">			pTask-&gt;SetNewTask(<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span>(pTask-&gt;ProcessFSM(pTask-&gt;GetState(), aiTask::OnEnter) == aiTask::FSM_Quit)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="comment">// Exit the state</span></span><br><span class="line">				pTask-&gt;ProcessFSM(pTask-&gt;GetState(), aiTask::OnExit);</span><br><span class="line">				bQuit = <span class="literal">true</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				bContinueFsmUpdate = <span class="literal">true</span>;</span><br><span class="line">				pTask-&gt;DebugIndicateAContinueFSMPoint();</span><br><span class="line">			&#125;</span><br><span class="line">	...</span><br></pre></td></tr></table></figure>
-
-
-<p>TaskTree可以中断任务：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// PURPOSE: Abort and delete all tasks above the specified priority.</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">AbortTasksAbovePriority</span><span class="params">(<span class="type">const</span> s32 iPriority)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// PURPOSE: Abort and delete all tasks at the specified priority</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">AbortTasksWithPriority</span><span class="params">(<span class="type">const</span> s32 iPriority)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// PURPOSE: Abort and delete all tasks associated with this task tree</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">AbortTasks</span><span class="params">()</span>;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h4><p>以链表的形式存储在TaskTree，有优先级，有前后节点、执行对象</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// PURPOSE: Entity task is operating on</span></span><br><span class="line">fwEntity* m_pEntity;</span><br><span class="line"></span><br><span class="line"><span class="comment">// PURPOSE: Parent task</span></span><br><span class="line"><span class="comment">// NOTES:   Deliberately not a regdref otherwise a constantly kept around task will be flooded with</span></span><br><span class="line"><span class="comment">//          SetParent references from children.  Delete protection should prevent you accidentally </span></span><br><span class="line"><span class="comment">//			deleting through it anyway.</span></span><br><span class="line">aiTask	  *m_pParent;</span><br><span class="line"></span><br><span class="line"><span class="comment">// PURPOSE: Child task</span></span><br><span class="line">RegdaiTask m_pSubTask;</span><br><span class="line"></span><br><span class="line"><span class="comment">// PURPOSE: New child task - will be activated by the task manager</span></span><br><span class="line">RegdaiTask m_pNewTask;</span><br></pre></td></tr></table></figure>
-
-<p>入口函数是<code>UpdateFSM</code>，由不同的Task子类重载。</p>
-<p>以MoveTask为例:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">CTask::FSM_Return <span class="title function_">CTaskMoveBase::UpdateFSM</span><span class="params">(<span class="type">const</span> s32 iState, <span class="type">const</span> FSM_Event iEvent)</span></span><br><span class="line">&#123;</span><br><span class="line">	CPed *pPed = GetPed(); <span class="comment">//Get the ped ptr.</span></span><br><span class="line"></span><br><span class="line">	FSM_Begin</span><br><span class="line">		<span class="title function_">FSM_State</span><span class="params">(State_Running)</span></span><br><span class="line">		FSM_OnUpdate</span><br><span class="line">		<span class="keyword">return</span> <span class="title function_">StateRunning_OnUpdate</span><span class="params">(pPed)</span>;</span><br><span class="line">	FSM_End</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">CTask::FSM_Return <span class="title function_">CTaskMoveBase::StateRunning_OnUpdate</span><span class="params">(CPed* pPed)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span>(ProcessMove(pPed))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> FSM_Quit;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		MoveAtSpeedInDirection(pPed);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> FSM_Continue;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// State machine generation macros</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FSM_Begin <span class="keyword">if</span>(iState&lt;0)&#123;<span class="keyword">if</span>(0)&#123;</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FSM_End &#125;&#125;<span class="keyword">else</span>&#123;Assertf(0, <span class="string">&quot;Didn&#x27;t handle state %i in UpdateFSM&quot;</span>, iState);\</span></span><br><span class="line"><span class="meta">	return(FSM_Quit);&#125;return(FSM_Continue);</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FSM_State(a)	&#125;&#125;<span class="keyword">else</span> <span class="keyword">if</span>(a == iState) &#123;<span class="keyword">if</span>(0)&#123;</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FSM_OnEvent(a)	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(a == iEvent) &#123;</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FSM_OnEnter		FSM_OnEvent(OnEnter)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FSM_OnUpdate	FSM_OnEvent(OnUpdate)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FSM_OnExit		FSM_OnEvent(OnExit)</span></span><br></pre></td></tr></table></figure>
-
-<p>宏展开是这样的</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">CTask::FSM_Return <span class="title function_">CTaskMoveBase::UpdateFSM</span><span class="params">(<span class="type">const</span> s32 iState, <span class="type">const</span> FSM_Event iEvent)</span></span><br><span class="line">&#123;</span><br><span class="line">    CPed *pPed = GetPed(); <span class="comment">// Get the ped ptr.</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (iState &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span>) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            Assertf(<span class="number">0</span>, <span class="string">&quot;Didn&#x27;t handle state %i in UpdateFSM&quot;</span>, iState);</span><br><span class="line">            <span class="keyword">return</span> FSM_Quit;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (iState == State_Running) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">0</span>) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (iEvent == OnUpdate) &#123;</span><br><span class="line">                <span class="keyword">return</span> StateRunning_OnUpdate(pPed);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> FSM_Continue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>Task的回收：目前看来是不存在回收的，直接delete掉了</p>
-<h4 id="TaskManager"><a href="#TaskManager" class="headerlink" title="TaskManager"></a>TaskManager</h4><p>每一种Ai实体都有TaskTreeManager，TaskManager有多个TaskTree。多个TaskTree按序存储在数组里。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">aiTaskManager::aiTaskManager(s32 iNumberOfTaskTreesRequired, <span class="type">bool</span> treesAreExternallyOwned)</span><br><span class="line">: m_TreesAreExternallyOwned(treesAreExternallyOwned)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// Create some empty task trees</span></span><br><span class="line">	m_Trees.Resize(iNumberOfTaskTreesRequired);</span><br><span class="line">	<span class="keyword">for</span>(s32 i = <span class="number">0</span>; i &lt; iNumberOfTaskTreesRequired; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		m_Trees[i] = <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>PedTree的顺序如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Task tree enums</span></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">ePedTaskTrees</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	PED_TASK_TREE_PRIMARY=<span class="number">0</span>,</span><br><span class="line">	PED_TASK_TREE_SECONDARY,</span><br><span class="line">	PED_TASK_TREE_MOVEMENT,</span><br><span class="line">	PED_TASK_TREE_MOTION,</span><br><span class="line">	PED_TASK_TREE_MAX</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CPedTaskManager</span> :</span> public CTaskManager</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">	CPedTaskManager(CPed* pPed, <span class="type">int</span> iNumberOfTaskTreesRequired);</span><br><span class="line">	virtual ~CPedTaskManager();</span><br><span class="line"></span><br><span class="line">protected:</span><br><span class="line"></span><br><span class="line">	virtual <span class="type">void</span> <span class="title function_">OnTaskChanged</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">	</span><br><span class="line">	CPed* m_pPed;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/12/28/Gta5-Task%E7%B3%BB%E7%BB%9F/" data-id="clqo6v8lr0000x4t10fdhdeqo" data-title="Gta5 Task系统" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-  
-    <a href="/2023/12/28/first-post/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">first post</div>
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>LuHe</strong>
     </a>
-  
-</nav>
 
-  
-</article>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-
-</section>
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
         
-          <aside id="sidebar">
-  
-    
-
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">December 2023</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
         
-          <li>
-            <a href="/2023/12/28/Gta5-Task%E7%B3%BB%E7%BB%9F/">Gta5 Task系统</a>
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
           </li>
+          
         
-          <li>
-            <a href="/2023/12/28/first-post/">first post</a>
-          </li>
         
-          <li>
-            <a href="/2023/12/28/hello-world/">Hello World</a>
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
           </li>
         
       </ul>
     </div>
   </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2023 John Doe<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
 </nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Gta5 Task系统"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-12-28 03:48" pubdate>
+          2023年12月28日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          617 字
+        
+      </span>
     
 
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          6 分钟
+        
+      </span>
+    
 
-<script src="/js/jquery-3.6.4.min.js"></script>
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Gta5 Task系统</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>探索一下Gta5的Task系统。</p>
+<h4 id="Task系统组成"><a href="#Task系统组成" class="headerlink" title="Task系统组成"></a>Task系统组成</h4><p><strong>aiTaskTree</strong><br><strong>aiTask</strong><br><strong>aiTaskManager</strong></p>
+<h4 id="TaskTree"><a href="#TaskTree" class="headerlink" title="TaskTree"></a>TaskTree</h4><p>入口函数<code>Process</code>以及<code>UpdateTasks</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">CTaskTree::Process</span><span class="hljs-params">(<span class="hljs-type">float</span> fTimeStep)</span><br>&#123;<br>	STRVIS_AUTO_CONTEXT(strStreamingVisualize::TASKTREE);<br><br>	<span class="hljs-comment">//main tasks</span><br>	UpdateTasks(<span class="hljs-literal">false</span>, <span class="hljs-number">-1</span>, fTimeStep);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>UpdateTasks</code>会运行任务队列，当任务执行完后会自动执行下一个任务。任务有优先级，会优先执行等级高的。同时由<code>BeginTaskUpdates</code>和<code>EndTaskUpdates</code>记录运行时间。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">aiTaskTree::UpdateTasks</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">bool</span> bDontDeleteHeadTask, <span class="hljs-type">const</span> s32 iDefaultTaskPriority, <span class="hljs-type">float</span> timeStep)</span><br>&#123;<br>	aiTask::BeginTaskUpdates(timeStep);<br><br>	m_iDeadman = <span class="hljs-number">1000</span>;<br><br>	<span class="hljs-comment">// Compute the priority of the main task to process.      </span><br>	s32 iPriority = GetActiveTaskPriority();<br><br>	<span class="hljs-comment">// Keep track of the current priority of task being processed.</span><br>	m_iPriorityBeingProcessed = iPriority;<br><br>	<span class="hljs-comment">// Process the highest priority task</span><br>	<span class="hljs-keyword">if</span>(iPriority &gt; <span class="hljs-number">-1</span>)<br>	&#123;<br> 		aiTask* pCurrentTask = m_Tasks[iPriority];<br>		<span class="hljs-keyword">while</span>(pCurrentTask)<br>		&#123;<br>			UpdateResult result = UpdateTask(pCurrentTask, timeStep);<br><br>			<span class="hljs-keyword">if</span>(result == UR_QUIT)<br>			&#123;	<br>				<span class="hljs-comment">// If the current task is the top-most parent task and it quits, we&#x27;ll be left with no current task,</span><br>				<span class="hljs-comment">// tasks can optionally force the next active task to update this frame</span><br>				<span class="hljs-type">const</span> <span class="hljs-type">bool</span> bProcessNextActiveTaskImmediately = pCurrentTask-&gt;GetIsFlagSet(aiTaskFlags::ProcessNextActiveTaskImmediately);<br><br>				<span class="hljs-comment">// The movement tasks have to be kept for one frame, so don&#x27;t delete them if requested not to</span><br>				<span class="hljs-keyword">if</span>(bDontDeleteHeadTask == <span class="hljs-literal">false</span>)<br>				&#123;<br>					DeleteTask(pCurrentTask);<br>				&#125;<br><br>				<span class="hljs-comment">// Create a new default task if the last one was just deleted.</span><br>				<span class="hljs-keyword">if</span>(iPriority == iDefaultTaskPriority)<br>				&#123;<br>					<span class="hljs-keyword">if</span>(m_pEntity)<br>					&#123;<br>						<span class="hljs-comment">// Replace the default task</span><br>						SetTask(GetDefaultTask(), iDefaultTaskPriority);<br><br>						<span class="hljs-comment">// Process the default task straight away</span><br>						pCurrentTask = m_Tasks[iDefaultTaskPriority];<br>					&#125;<br>					<span class="hljs-keyword">else</span><br>					&#123;<br>						pCurrentTask = <span class="hljs-literal">NULL</span>;<br>					&#125;<br>				&#125;<br>				<span class="hljs-keyword">else</span><br>				&#123;<br>					<span class="hljs-comment">// Process the next active task straight away after we&#x27;ve finished our current task if flagged to</span><br>					<span class="hljs-keyword">if</span>(bProcessNextActiveTaskImmediately)<br>					&#123;<br>						iPriority = GetActiveTaskPriority();<br>						pCurrentTask = m_Tasks[iPriority];<br>					&#125;<br>					<span class="hljs-keyword">else</span><br>					&#123;<br>						pCurrentTask = <span class="hljs-literal">NULL</span>;<br>					&#125;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">else</span><br>			&#123;<br>				pCurrentTask = <span class="hljs-literal">NULL</span>;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-comment">// Reset the priority being processed</span><br>	m_iPriorityBeingProcessed = <span class="hljs-number">-1</span>;<br><br>	aiTask::EndTaskUpdates();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>UpdateTask</code>重载是主要部分执行:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">UpdateResult <span class="hljs-title function_">UpdateTask</span><span class="hljs-params">(aiTask* pTask, <span class="hljs-type">float</span> timeStep)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>内部是循环执行<code>Task::ProcessFSM</code>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Call the main update function</span><br>	<span class="hljs-keyword">while</span>(bContinueFsmUpdate)<br>	&#123;<br>		<span class="hljs-comment">// By default, don&#x27;t repeat the FSM update, this will be set below if the state changes</span><br>		bContinueFsmUpdate = <span class="hljs-literal">false</span>;<br><br>		<span class="hljs-comment">// Keep track of any state changes</span><br>		s32 iOldState = pTask-&gt;GetState();<br><br>		<span class="hljs-comment">// Tell the task about it&#x27;s recording status</span><br><span class="hljs-meta">#<span class="hljs-keyword">if</span> TASK_DETAILED_INFINITE_LOOP_TRAP</span><br>		NOTFINAL_ONLY(pTask-&gt;SetCallstackRecordingFlagState( taskRecordingFlags ));<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>		<span class="hljs-comment">// If the state is being restarted after being aborted, simply restart the state then continue as normal</span><br>		<span class="hljs-comment">// OR if the state hasn&#x27;t yet started, enter the state then continue as normal</span><br>		<span class="hljs-keyword">if</span>(pTask-&gt;m_Flags.IsFlagSet(aiTaskFlags::RestartStateOnResume) || pTask-&gt;m_Flags.IsFlagSet(aiTaskFlags::CurrentStateNotYetEntered))<br>		&#123;<br>			<span class="hljs-comment">// Enter the new state, reset the task pointer in case it is non-null </span><br>			pTask-&gt;SetNewTask(<span class="hljs-literal">NULL</span>);<br><br>			<span class="hljs-keyword">if</span>(pTask-&gt;ProcessFSM(pTask-&gt;GetState(), aiTask::OnEnter) == aiTask::FSM_Quit)<br>			&#123;<br>				<span class="hljs-comment">// Exit the state</span><br>				pTask-&gt;ProcessFSM(pTask-&gt;GetState(), aiTask::OnExit);<br>				bQuit = <span class="hljs-literal">true</span>;<br>			&#125;<br>			<span class="hljs-keyword">else</span><br>			&#123;<br>				bContinueFsmUpdate = <span class="hljs-literal">true</span>;<br>				pTask-&gt;DebugIndicateAContinueFSMPoint();<br>			&#125;<br>	...<br></code></pre></td></tr></table></figure>
+
+
+<p>TaskTree可以中断任务：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// PURPOSE: Abort and delete all tasks above the specified priority.</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">AbortTasksAbovePriority</span><span class="hljs-params">(<span class="hljs-type">const</span> s32 iPriority)</span>;<br><br><span class="hljs-comment">// PURPOSE: Abort and delete all tasks at the specified priority</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">AbortTasksWithPriority</span><span class="hljs-params">(<span class="hljs-type">const</span> s32 iPriority)</span>;<br><br><span class="hljs-comment">// PURPOSE: Abort and delete all tasks associated with this task tree</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">AbortTasks</span><span class="hljs-params">()</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h4><p>以链表的形式存储在TaskTree，有优先级，有前后节点、执行对象</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// PURPOSE: Entity task is operating on</span><br>fwEntity* m_pEntity;<br><br><span class="hljs-comment">// PURPOSE: Parent task</span><br><span class="hljs-comment">// NOTES:   Deliberately not a regdref otherwise a constantly kept around task will be flooded with</span><br><span class="hljs-comment">//          SetParent references from children.  Delete protection should prevent you accidentally </span><br><span class="hljs-comment">//			deleting through it anyway.</span><br>aiTask	  *m_pParent;<br><br><span class="hljs-comment">// PURPOSE: Child task</span><br>RegdaiTask m_pSubTask;<br><br><span class="hljs-comment">// PURPOSE: New child task - will be activated by the task manager</span><br>RegdaiTask m_pNewTask;<br></code></pre></td></tr></table></figure>
+
+<p>入口函数是<code>UpdateFSM</code>，由不同的Task子类重载。</p>
+<p>以MoveTask为例:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c">CTask::FSM_Return <span class="hljs-title function_">CTaskMoveBase::UpdateFSM</span><span class="hljs-params">(<span class="hljs-type">const</span> s32 iState, <span class="hljs-type">const</span> FSM_Event iEvent)</span><br>&#123;<br>	CPed *pPed = GetPed(); <span class="hljs-comment">//Get the ped ptr.</span><br><br>	FSM_Begin<br>		<span class="hljs-title function_">FSM_State</span><span class="hljs-params">(State_Running)</span><br>		FSM_OnUpdate<br>		<span class="hljs-keyword">return</span> <span class="hljs-title function_">StateRunning_OnUpdate</span><span class="hljs-params">(pPed)</span>;<br>	FSM_End<br>&#125;<br><br>CTask::FSM_Return <span class="hljs-title function_">CTaskMoveBase::StateRunning_OnUpdate</span><span class="hljs-params">(CPed* pPed)</span><br>&#123;<br>	<span class="hljs-keyword">if</span>(ProcessMove(pPed))<br>	&#123;<br>		<span class="hljs-keyword">return</span> FSM_Quit;<br>	&#125;<br>	<span class="hljs-keyword">else</span><br>	&#123;<br>		MoveAtSpeedInDirection(pPed);<br><br>		<span class="hljs-keyword">return</span> FSM_Continue;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// State machine generation macros</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FSM_Begin <span class="hljs-keyword">if</span>(iState&lt;0)&#123;<span class="hljs-keyword">if</span>(0)&#123;</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FSM_End &#125;&#125;<span class="hljs-keyword">else</span>&#123;Assertf(0, <span class="hljs-string">&quot;Didn&#x27;t handle state %i in UpdateFSM&quot;</span>, iState);\</span><br><span class="hljs-meta">	return(FSM_Quit);&#125;return(FSM_Continue);</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FSM_State(a)	&#125;&#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(a == iState) &#123;<span class="hljs-keyword">if</span>(0)&#123;</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FSM_OnEvent(a)	&#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(a == iEvent) &#123;</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FSM_OnEnter		FSM_OnEvent(OnEnter)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FSM_OnUpdate	FSM_OnEvent(OnUpdate)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FSM_OnExit		FSM_OnEvent(OnExit)</span><br></code></pre></td></tr></table></figure>
+
+<p>宏展开是这样的</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs c">CTask::FSM_Return <span class="hljs-title function_">CTaskMoveBase::UpdateFSM</span><span class="hljs-params">(<span class="hljs-type">const</span> s32 iState, <span class="hljs-type">const</span> FSM_Event iEvent)</span><br>&#123;<br>    CPed *pPed = GetPed(); <span class="hljs-comment">// Get the ped ptr.</span><br><br>    <span class="hljs-keyword">if</span> (iState &lt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span>) &#123;<br>        &#125;<br>        <span class="hljs-keyword">else</span> &#123;<br>            Assertf(<span class="hljs-number">0</span>, <span class="hljs-string">&quot;Didn&#x27;t handle state %i in UpdateFSM&quot;</span>, iState);<br>            <span class="hljs-keyword">return</span> FSM_Quit;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">if</span> (iState == State_Running) &#123;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span>) &#123;<br>            &#125;<br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (iEvent == OnUpdate) &#123;<br>                <span class="hljs-keyword">return</span> StateRunning_OnUpdate(pPed);<br>            &#125;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> FSM_Continue;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>Task的回收：目前看来是不存在回收的，直接delete掉了</p>
+<h4 id="TaskManager"><a href="#TaskManager" class="headerlink" title="TaskManager"></a>TaskManager</h4><p>每一种Ai实体都有TaskTreeManager，TaskManager有多个TaskTree。多个TaskTree按序存储在数组里。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c">aiTaskManager::aiTaskManager(s32 iNumberOfTaskTreesRequired, <span class="hljs-type">bool</span> treesAreExternallyOwned)<br>: m_TreesAreExternallyOwned(treesAreExternallyOwned)<br>&#123;<br>	<span class="hljs-comment">// Create some empty task trees</span><br>	m_Trees.Resize(iNumberOfTaskTreesRequired);<br>	<span class="hljs-keyword">for</span>(s32 i = <span class="hljs-number">0</span>; i &lt; iNumberOfTaskTreesRequired; i++)<br>	&#123;<br>		m_Trees[i] = <span class="hljs-literal">NULL</span>;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>PedTree的顺序如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//Task tree enums</span><br><span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">ePedTaskTrees</span></span><br><span class="hljs-class">&#123;</span><br>	PED_TASK_TREE_PRIMARY=<span class="hljs-number">0</span>,<br>	PED_TASK_TREE_SECONDARY,<br>	PED_TASK_TREE_MOVEMENT,<br>	PED_TASK_TREE_MOTION,<br>	PED_TASK_TREE_MAX<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CPedTaskManager</span> :</span> public CTaskManager<br>&#123;<br>public:<br><br>	CPedTaskManager(CPed* pPed, <span class="hljs-type">int</span> iNumberOfTaskTreesRequired);<br>	virtual ~CPedTaskManager();<br><br>protected:<br><br>	virtual <span class="hljs-type">void</span> <span class="hljs-title function_">OnTaskChanged</span><span class="hljs-params">()</span>;<br><br>private:<br>	<br>	CPed* m_pPed;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="category-chain-item">源码解析</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Gta5 Task系统</div>
+      <div>http://example.com/2023/12/28/Gta5-Task系统/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>luhe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年12月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/12/28/first-post/" title="first post">
+                        <span class="hidden-mobile">first post</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
 
 
 
   
-<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
 
 
 
 
-<script src="/js/script.js"></script>
 
 
 
+    
 
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
   </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 </body>
 </html>
